@@ -106,12 +106,6 @@
           "displayName": {
             "type": "string"
           },
-          "allowedActions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "dataSources": {
             "type": "array",
             "items": {
@@ -156,12 +150,6 @@
                     "properties": {
                       "tableName": {
                         "type": "string"
-                      },
-                      "allowedActions": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
                       },
                       "tableNameOverride": {
                         "type": "object",
