@@ -173,7 +173,7 @@ for (const [name, r] of Object.entries(refs)) {
     for (const [p, v] of t) if (!ok(v.allowedActions)) { bad++; console.log("MISSING per-table allowedActions: " + name + " -> " + p); }
   } else if (!ok(r.allowedActions)) { bad++; console.log("MISSING connector-level allowedActions: " + name); }
 }
-console.log(bad ? bad + " issue(s): fix before deploy" : "OK: all shared references declare allowedActions");
+if (bad) { console.log(bad + " issue(s): fix before deploy"); process.exitCode = 1; } else console.log("OK: all shared references declare allowedActions");
 '
 ```
 

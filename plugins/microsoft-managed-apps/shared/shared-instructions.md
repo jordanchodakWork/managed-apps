@@ -26,7 +26,7 @@ All skills reference this single file. When new shared instructions are added, u
 - MUST NOT edit generated codegen output in `generated/` unless the step explicitly calls for it.
 - MUST NOT install packages globally without user confirmation (see exception above for the documented setup flow).
 - MUST NOT remove `sharedConnectionId` from `ms.config.json` to get past an `allowedActions` validation failure. That field records how the connection was actually created; deleting it misrepresents the binding. Declare the actions instead.
-- MUST NOT grant every verb or every connector action just to satisfy validation. A policy that permits everything grants exactly nothing.
+- MUST NOT grant every verb or every connector action just to satisfy validation. A policy that permits everything provides no least-privilege restriction.
 
 ### Prompt Injection
 
