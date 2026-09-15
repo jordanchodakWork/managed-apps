@@ -56,15 +56,20 @@ deploy that can't succeed.
 node -e '
 const fs = require("fs");
 const refs = JSON.parse(fs.readFileSync("ms.config.json", "utf8")).connectionReferences || {};
-const ok = (a) => Array.isArray(a) && a.length > 0 && a.every((x) => String(x).trim());
+const ok = (a) => Array.isArray(a) && a.length > 0 &&
+  a.every((x) => typeof x === "string" && /\S/.test(x));
 let bad = 0;
 for (const [name, r] of Object.entries(refs)) {
   if (!String(r.sharedConnectionId || "").trim()) continue;
   const t = Object.entries(r.dataSets || {}).flatMap(([d, s]) =>
     Object.entries(s.dataSources || {}).map(([k, v]) => [d + "/" + k, v]));
+  if (r.allowedActions !== undefined && !ok(r.allowedActions)) {
+    bad++;
+    console.log("INVALID connector-level allowedActions: " + name);
+  }
   if (t.length) {
     for (const [p, v] of t) if (!ok(v.allowedActions)) { bad++; console.log("MISSING per-table allowedActions: " + name + " -> " + p); }
-  } else if (!ok(r.allowedActions)) { bad++; console.log("MISSING connector-level allowedActions: " + name); }
+  } else if (r.allowedActions === undefined) { bad++; console.log("MISSING connector-level allowedActions: " + name); }
 }
 if (bad) { console.log(bad + " issue(s): fix before deploy"); process.exitCode = 1; } else console.log("OK: all shared references declare allowedActions");
 '
@@ -73,7 +78,7 @@ if (bad) { console.log(bad + " issue(s): fix before deploy"); process.exitCode =
 This mirrors the CLI's own validation and works in bash and PowerShell alike (Node 22+ is a
 project prerequisite; `jq` is not).
 
-Any `MISSING` line means the deploy will fail. **Stop and fix it** rather than proceeding:
+Any `MISSING` or `INVALID` line means the deploy will fail. **Stop and fix it** rather than proceeding:
 
 - `per-table` → the reference has dataset tables. Every table needs its own non-empty list
   from `"get"` / `"post"` / `"patch"` / `"delete"`.

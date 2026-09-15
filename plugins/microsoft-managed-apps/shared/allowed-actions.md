@@ -82,22 +82,29 @@ bash and PowerShell (unlike `jq`, which isn't on PATH by default on Windows):
 node -e '
 const fs = require("fs");
 const refs = JSON.parse(fs.readFileSync("ms.config.json", "utf8")).connectionReferences || {};
-const ok = (a) => Array.isArray(a) && a.length > 0 && a.every((x) => String(x).trim());
+const ok = (a) => Array.isArray(a) && a.length > 0 &&
+  a.every((x) => typeof x === "string" && /\S/.test(x));
 let bad = 0;
 for (const [name, r] of Object.entries(refs)) {
   if (!String(r.sharedConnectionId || "").trim()) continue;
   const t = Object.entries(r.dataSets || {}).flatMap(([d, s]) =>
     Object.entries(s.dataSources || {}).map(([k, v]) => [d + "/" + k, v]));
+  if (r.allowedActions !== undefined && !ok(r.allowedActions)) {
+    bad++;
+    console.log("INVALID connector-level allowedActions: " + name);
+  }
   if (t.length) {
     for (const [p, v] of t) if (!ok(v.allowedActions)) { bad++; console.log("MISSING per-table allowedActions: " + name + " -> " + p); }
-  } else if (!ok(r.allowedActions)) { bad++; console.log("MISSING connector-level allowedActions: " + name); }
+  } else if (r.allowedActions === undefined) { bad++; console.log("MISSING connector-level allowedActions: " + name); }
 }
 if (bad) { console.log(bad + " issue(s): fix before deploy"); process.exitCode = 1; } else console.log("OK: all shared references declare allowedActions");
 '
 ```
 
 This mirrors the CLI's own validation, so a clean result here means `ms app pack` /
-`ms app deploy` will pass this check. The output also tells you which shape to author:
+`ms app deploy` will pass this check. `MISSING` identifies a required declaration that is
+absent; `INVALID` identifies a present connector-level declaration that is empty or contains
+a non-string or blank entry. The output also tells you which shape to author:
 `per-table` means the reference has dataset tables, `connector-level` means it doesn't.
 
 Non-shared references, and `sharedConnectionId` values that are `null` or whitespace, are
