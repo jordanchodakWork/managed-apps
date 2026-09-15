@@ -45,7 +45,22 @@
     "buildEntryPoint": {
       "type": "string"
     },
+    "data": {
+      "description": "Schema source file configuration. If db.schemaPath is also configured, both path values must match exactly without normalization.",
+      "type": "object",
+      "properties": {
+        "schemaPath": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schemaPath"
+      ],
+      "additionalProperties": false
+    },
     "db": {
+      "deprecated": true,
+      "description": "Legacy alias for data. If data.schemaPath is also configured, both path values must match exactly without normalization.",
       "type": "object",
       "properties": {
         "schemaPath": {
@@ -162,6 +177,14 @@
                           }
                         },
                         "additionalProperties": false
+                      },
+                      "allowedActions": {
+                        "minItems": 1,
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "pattern": "\\S"
+                        }
                       }
                     },
                     "additionalProperties": false
@@ -218,35 +241,6 @@
               "additionalProperties": false
             }
           },
-          "workflowDetails": {
-            "type": "object",
-            "properties": {
-              "workflowEntityId": {
-                "type": "string"
-              },
-              "workflowDisplayName": {
-                "type": "string"
-              },
-              "workflowName": {
-                "type": "string"
-              },
-              "dependencies": {
-                "type": "object",
-                "propertyNames": {
-                  "type": "string"
-                },
-                "additionalProperties": {
-                  "type": "string"
-                }
-              }
-            },
-            "required": [
-              "workflowEntityId",
-              "workflowDisplayName",
-              "workflowName"
-            ],
-            "additionalProperties": false
-          },
           "isOnPremiseConnection": {
             "type": "boolean"
           },
@@ -276,6 +270,14 @@
                 "logicalName"
               ],
               "additionalProperties": false
+            }
+          },
+          "allowedActions": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "\\S"
             }
           }
         },
