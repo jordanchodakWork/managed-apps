@@ -183,7 +183,7 @@ Detect this by matching `Could not commit and push the initial scaffold` togethe
 
 For every connector identified in Step 3 / Step 4, invoke the matching skill **now**, in this session, before any UI code is generated:
 
-- A specific `/add-*` skill when one exists (`/add-dataverse`, `/add-sharepoint`, `/add-excel`, `/add-office365`, `/add-teams`, `/add-onedrive`, `/add-azuredevops`, `/add-mcscopilot`, `/add-workiq`).
+- A specific `/add-*` skill when one exists (`/add-dataverse`, `/add-sharepoint`, `/add-excel`, `/add-office365`, `/add-office365-users`, `/add-teams`, `/add-onedrive`, `/add-azuredevops`, `/add-mcscopilot`, `/add-workiq`).
 - `/add-data-source` (with api-id) for anything else.
 
 For Work IQ knowledge/search scenarios, prefer `/add-workiq` (maps to `shared_a365copilotchatmcp`) over generic `/add-data-source`.
@@ -193,6 +193,7 @@ Run them sequentially. After each one:
 - Confirm the typed services were generated under `generated/` at the project root. The add-* skills regenerate TypeScript clients.
 - **For implementation guidance**, refer to the specialized skill's documentation:
   - `/add-office365` → See "Office 365 Connector: Method Selection Guide" for correct import paths, calendar discovery, and API patterns
+  - `/add-office365-users` → See "Office 365 Users: Method Selection Guide" for profile, reporting relationship, and CSP-safe profile photo patterns
   - `/add-workiq` → See "Work IQ Integration: MCP Session Pattern" for session management and response parsing
   - Other `/add-*` skills have similar guidance
 - Capture the connection ID + service path so Step 9 can import them.

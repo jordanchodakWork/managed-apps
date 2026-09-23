@@ -30,6 +30,7 @@ ms connector list-actions --connector shared_office365 --search Mail
 
 For common connectors, shortcuts exist:
 - **`/add-office365`** — Office 365 Outlook (calendar, email)
+- **`/add-office365-users`** — Office 365 Users (profiles, managers, direct reports, people search, profile photos)
 - **`/add-teams`** — Teams messages
 - **`/add-sharepoint`** — SharePoint lists/documents
 - **`/add-dataverse`** — Dataverse tables
@@ -68,6 +69,7 @@ Does the app need to search across M365 (email, files, calendar, contacts)?
   │
   └─ NO, or need specific list filtering → Use the specific connector
       Example: "List calendar events in December" → Office365
+      Example: "Show my direct reports with profile photos" → Office 365 Users
       Example: "Find all tasks assigned to me" → Azure DevOps
       Example: "Search documents with keyword" → SharePoint
 ```
@@ -81,6 +83,7 @@ Does the app need to search across M365 (email, files, calendar, contacts)?
 ```
 What type of data?
   ├─ Calendar events, emails, inbox → Office 365 Outlook (`/add-office365`)
+  ├─ User profiles, managers, direct reports, profile photos → Office 365 Users (`/add-office365-users`)
   ├─ Teams messages, channels → Teams (`/add-teams`)
   ├─ SharePoint lists, documents → SharePoint (`/add-sharepoint`)
   ├─ Files (upload, download, version) → OneDrive (`/add-onedrive`)
@@ -172,6 +175,7 @@ When a user describes their app, answer this checklist internally from the promp
 
 3. **What service/data does the app work with?** (Pick from the matrix above)
    - Calendar → Office365
+   - People, profiles, org relationships → Office 365 Users
    - Messages → Teams
    - Documents → SharePoint or OneDrive
    - Lists → Dataverse or SharePoint
@@ -243,6 +247,20 @@ Connectors Recommended:
   3. Optional: Work IQ (`/add-workiq`) — search customer conversations
 ```
 
+### **Pattern 6: People or Team Directory**
+```
+User Goal: "Show selected employees or everyone who reports to me with profile photos"
+
+Connector Recommended:
+  1. Office 365 Users (`/add-office365-users`) — profiles, reporting relationships, and photos
+
+Implementation:
+  - Resolve the manager ID or UPN with `MyProfile_V2('id,userPrincipalName')`, then call `DirectReports_V2(managerId, ...)`
+  - Use `UserProfile_V2(upn, ...)` for explicitly selected users
+  - Use `UserPhotoMetadata` followed by `UserPhoto_V2`
+  - Convert runtime `Uint8Array` photo data to a CSP-safe base64 `data:` URL
+```
+
 ---
 
 ## Implementation Guidance for Skills
@@ -273,7 +291,7 @@ This skill handles ANY connector, including those not listed in this guide. When
    - Check Microsoft connectors documentation: https://learn.microsoft.com/en-us/connectors/
    - Use `/list-connectors` skill to browse available connectors
 
-**This guide covers the most common cases, but `/add-data-source` works with any Microsoft connector — not just the 10 listed above.**
+**This guide covers the most common cases, but `/add-data-source` works with any Microsoft connector — not just the commonly listed connectors above.**
 
 ### **For managed apps Architect Agent**
 
@@ -325,6 +343,19 @@ Decision Process:
    - `/add-dataverse` (store customer records)
    - `/add-mcscopilot` (generate summaries)
    - Optional: `/add-office365` (if fetching customer emails)
+```
+
+### **Example 4: User says "Show everyone who reports to me with their profile photo"**
+
+```
+Decision Process:
+  1. Is it semantic search? → NO
+  2. Service? → Microsoft 365 user directory and org relationships
+  3. Action needed? → READ
+  4. Binary content? → YES (profile photos)
+
+→ Recommend: `/add-office365-users`
+→ Use CSP-safe base64 data URLs for the connector's binary photo responses
 ```
 
 ---

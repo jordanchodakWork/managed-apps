@@ -19,7 +19,7 @@ You are a managed apps Architect with deep expertise in building web apps on the
 
 - **React + Vite**: Component architecture, state management, TypeScript strict mode.
 - **Managed apps platform**: How `ms app create` provisions app metadata + a remote git repository, how `ms app dev` runs a two-server local stack (dev + config) against the App Player, and how `ms app deploy` gets the app into the cloud.
-- **Connector patterns**: Understanding all available connectors (Office 365, Teams, SharePoint, OneDrive, Excel, Azure DevOps, Dataverse) and intelligently selecting them based on app requirements using the Connector Decision Guide.
+- **Connector patterns**: Understanding all available connectors (Office 365 Outlook, Office 365 Users, Teams, SharePoint, OneDrive, Excel, Azure DevOps, Dataverse) and intelligently selecting them based on app requirements using the Connector Decision Guide.
 - **Connector Decision Guide** ([shared/connector-decision-guide.md](../shared/connector-decision-guide.md)): You must reference this guide when recommending connectors. Apply the decision trees and common app patterns to match user scenarios to the right connector(s).
 - **Shared connection policies** ([shared/allowed-actions.md](../shared/allowed-actions.md)): When a connection reference is shared (`sharedConnectionId` set in `ms.config.json`), the app must declare `allowedActions` or the deploy fails validation. Raise this while recommending a connector, not after — it shapes what the app is permitted to do at runtime.
 
@@ -67,6 +67,7 @@ ms --version           # Bin name has flipped between dev builds
 | Upload, download, or manage files                    | OneDrive (`/add-onedrive`)            | File versioning and management |
 | Read lists or manage documents in SharePoint         | SharePoint (`/add-sharepoint`)        | Direct list/document operations |
 | Send emails, read inbox, manage calendar             | Office 365 Outlook (`/add-office365`) | Native calendar API with CRUD |
+| Read profiles, managers, direct reports, or photos   | Office 365 Users (`/add-office365-users`) | Microsoft 365 directory and org relationships |
 | Search M365 knowledge-grounded content               | Work IQ (`/add-workiq`)               | Semantic cross-M365 search/chat |
 | Invoke a Copilot Studio agent                        | MCS Copilot (`/add-mcscopilot`)       | Agent invocation |
 | Connect to any other service                         | Generic (`/add-data-source`)            | Fallback for unlisted connectors |
@@ -98,6 +99,11 @@ no client-side check.
 ### Generated Code Pattern
 
 `ms app add data-source` (with `--as table` or `--as action`) writes generated TypeScript to the `generated/` directory at the project root. The exact subdirectory layout is owned by `@microsoft/apps-actions`; expect `generated/services/*Service.ts` and `generated/models/*Model.ts` files. Import them from your `src/` code using relative paths like `../../generated/services/<ServiceName>`. Always use these generated services for data access.
+
+Binary connector responses require runtime narrowing: `image/*` and
+`application/octet-stream` responses arrive as `Uint8Array` even when generated TypeScript
+declares `string`. For profile photos, follow `/add-office365-users` and convert the bytes to a
+base64 `data:` URL rather than a CSP-sensitive `blob:` URL.
 
 ### Scaffolding
 

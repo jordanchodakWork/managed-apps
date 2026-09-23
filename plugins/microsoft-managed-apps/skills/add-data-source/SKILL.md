@@ -237,6 +237,7 @@ shared — the `allowedActions` that were agreed, so the next session doesn't re
 | `/add-sharepoint`    | `shared_sharepointonline`       | `table`    |
 | `/add-excel`         | `shared_excelonlinebusiness`    | `table`    |
 | `/add-office365`     | `shared_office365`              | `action`   |
+| `/add-office365-users` | `shared_office365users`       | `action`   |
 | `/add-teams`         | `shared_teams`                  | `action`   |
 | `/add-onedrive`      | `shared_onedriveforbusiness`    | `action`   |
 | `/add-azuredevops`   | `shared_visualstudioteamservices` | `action` |

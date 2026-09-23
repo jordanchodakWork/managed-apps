@@ -144,7 +144,7 @@ Managed apps run inside a sandbox. Direct HTTP calls to external APIs will fail 
 
 | ❌ Never do this                           | ✅ Always do this                                            |
 | ----------------------------------------- | ------------------------------------------------------------ |
-| `fetch("https://graph.microsoft.com/...")` | Use `/add-office365`, `/add-sharepoint`, or `/add-dataverse` |
+| `fetch("https://graph.microsoft.com/...")` | Use `/add-office365-users`, `/add-office365`, `/add-sharepoint`, or `/add-dataverse` |
 | `axios.get("https://dev.azure.com/...")`  | Use `/add-azuredevops`                                       |
 | Any raw HTTP call to an M365/Azure service | Use the corresponding connector skill                        |
 
@@ -218,6 +218,13 @@ if (items.length === 0) {
 **Distinction:**
 - **Valid but empty** (length === 0) → show UI empty state
 - **API failed** (success === false) → throw error
+
+### Binary Responses
+
+The runtime returns `image/*` and `application/octet-stream` response bodies as `Uint8Array`,
+even if generated TypeScript declares `IOperationResult<string>`. Narrow the runtime value
+before using it. For images, convert the bytes to a base64 `data:` URL; deployed App Player CSP
+may block `blob:` URLs. See `/add-office365-users` for a complete chunk-safe conversion.
 
 ---
 

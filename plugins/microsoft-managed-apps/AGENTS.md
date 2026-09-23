@@ -64,6 +64,7 @@ This plugin uses a memory bank (`memory-bank.md`) to persist state across sessio
 | `/add-sharepoint`  | SharePoint Online lists/documents.                                        |
 | `/add-excel`       | Excel Online (Business) workbooks.                                        |
 | `/add-office365`   | Office 365 Outlook (calendar, email).                                     |
+| `/add-office365-users` | Office 365 Users (profiles, org relationships, profile photos).       |
 | `/add-teams`       | Teams messaging.                                                          |
 | `/add-onedrive`    | OneDrive for Business files.                                              |
 | `/add-azuredevops` | Azure DevOps work items / pipelines.                                      |
