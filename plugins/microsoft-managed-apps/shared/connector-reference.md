@@ -86,6 +86,17 @@ Generated service files (e.g., `Office365OutlookService.ts`) can be thousands of
 
 This avoids context-window bloat. Generated services and models land in `generated/` at the project root (e.g., `generated/services/Office365OutlookService.ts`, `generated/models/Office365OutlookModel.ts`). Import them from your `src/` files using relative paths like `../../generated/services/<ServiceName>`.
 
+## Binary connector responses
+
+The runtime decodes `image/*` and `application/octet-stream` responses into `Uint8Array`, even
+when a generated service signature declares `IOperationResult<string>`. Treat the returned
+`data` as `unknown` and narrow it at runtime.
+
+For images rendered in the deployed App Player, prefer a base64 `data:` URL. Do not assume
+`blob:` URLs are permitted by the deployed content security policy. The
+`/add-office365-users` skill contains the complete chunk-safe conversion and profile-photo
+pattern.
+
 ## Sub-Skill Invocation
 
 When a connector skill is invoked from another skill (e.g., `/create-app` plans `/add-office365`):

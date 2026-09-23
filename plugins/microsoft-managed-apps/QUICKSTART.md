@@ -76,6 +76,7 @@ Your copilot will recommend data sources based on what your app needs to do. To 
 | Read/write an Excel workbook         | `/add-excel`       |
 | Upload or download files             | `/add-onedrive`    |
 | Send emails or manage calendar       | `/add-office365`   |
+| Read user profiles or profile photos | `/add-office365-users` |
 | Send Teams messages                  | `/add-teams`       |
 | Query Azure DevOps work items        | `/add-azuredevops` |
 | Invoke a Copilot Studio agent        | `/add-mcscopilot`  |
