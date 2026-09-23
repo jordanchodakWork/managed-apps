@@ -124,8 +124,14 @@ function toImageDataUrl(value: unknown, contentType = 'image/jpeg') {
   }
 
   if (typeof value === 'string') {
-    if (/^(data:|https?:)/i.test(value)) {
+    if (/^data:image\/[a-z0-9.+-]+;base64,/i.test(value)) {
       return value
+    }
+
+    if (/^https?:/i.test(value)) {
+      throw new Error(
+        'Profile photo returned an HTTP URL instead of binary image data.',
+      )
     }
 
     return `data:${contentType};base64,${value}`
@@ -134,6 +140,10 @@ function toImageDataUrl(value: unknown, contentType = 'image/jpeg') {
   throw new Error('The profile photo response used an unsupported format.')
 }
 ```
+
+`UserPhoto_V2` has a binary response contract and does not return an external image URL.
+An HTTP value indicates an unexpected response shape, so the helper rejects it rather than
+passing a potentially CSP-blocked or authenticated URL to `<img src>`.
 
 Complete photo flow:
 
