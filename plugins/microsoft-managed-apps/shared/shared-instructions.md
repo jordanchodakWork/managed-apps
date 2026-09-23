@@ -1,6 +1,6 @@
 # Shared Instructions
 
-**This file aggregates all cross-cutting instructions that apply to every skill in the Managed apps plugin.**
+**This file aggregates all cross-cutting instructions that apply to every skill in the managed apps plugin.**
 
 All skills reference this single file. When new shared instructions are added, update this file only — no changes needed to individual skills.
 

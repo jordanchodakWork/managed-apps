@@ -1,10 +1,10 @@
 # Microsoft Managed Apps Plugin — Development Guidelines
 
-This file provides instructions for assistants working on the Managed apps plugin itself (not for end-users of the plugin).
+This file provides instructions for assistants working on the managed apps plugin itself (not for end-users of the plugin).
 
 ## Overview
 
-The Managed apps plugin wraps `@microsoft/managed-apps-cli` (binary `ms`) to scaffold, develop, and ship Managed apps end-to-end. It provides skills for:
+The managed apps plugin wraps `@microsoft/managed-apps-cli` (binary `ms`) to scaffold, develop, and ship managed apps end-to-end. It provides skills for:
 
 - Creating a new app (`/create-app`) — global install of the CLI, scaffold, local dev loop.
 - Iterating locally (`/dev`) — `ms app dev`, hot reload against the App Player.

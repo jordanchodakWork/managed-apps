@@ -2,7 +2,7 @@
 
 > **Preview** — this plugin is in preview and under active development. Behavior may change.
 
-Copilot plugin for building **Managed apps** using `@microsoft/managed-apps-cli` (binary `ms`), React, and Vite. Works with both Claude Code and GitHub Copilot.
+Copilot plugin for building **managed apps** using `@microsoft/managed-apps-cli` (binary `ms`), React, and Vite. Works with both Claude Code and GitHub Copilot.
 
 Managed apps run locally against the App Player with hot reload (`ms app dev`) and deploy to the cloud only when you choose to.
 
@@ -19,7 +19,7 @@ Managed apps run locally against the App Player with hot reload (`ms app dev`) a
 - [Node.js v22+](https://nodejs.org/)
 - Git + Git Credential Manager
 - [Claude Code](https://code.claude.com/docs/en/getting-started) or [GitHub Copilot CLI](https://github.com/features/copilot/cli/)
-- Access to a Managed apps-enabled tenant. The `@microsoft/managed-apps-cli` package is published on the public npm registry: [`@microsoft/managed-apps-cli`](https://www.npmjs.com/package/@microsoft/managed-apps-cli).
+- Access to a managed apps-enabled tenant. The `@microsoft/managed-apps-cli` package is published on the public npm registry: [`@microsoft/managed-apps-cli`](https://www.npmjs.com/package/@microsoft/managed-apps-cli).
 
 The `/create-app` skill handles the global install of `@microsoft/managed-apps-cli@latest` on its own — you don't need to set that up by hand.
 

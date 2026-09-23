@@ -1,6 +1,6 @@
 # Development Standards
 
-Standards that apply to all Managed apps skills.
+Standards that apply to all managed apps skills.
 
 ## Theme
 
